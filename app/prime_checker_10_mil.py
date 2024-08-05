@@ -46,5 +46,9 @@ def is_prime(n) -> bool:
 
 my_rdd = spark.sparkContext.textFile("file:///home/hiep/work/spark-k/data/ex2.txt")
 
-primes = my_rdd.map(lambda x: int(x)).filter(is_prime).saveAsTextFile("file:///home/hiep/work/spark-k/result/primes")
-print(my_rdd.getNumPartitions())
+primes = my_rdd.map(lambda x: int(x)) \
+        .filter(is_prime) \
+        .saveAsTextFile("file:///home/hiep/work/spark-k/result/primes")
+
+
+print("Number of partitions: ", my_rdd.getNumPartitions())
