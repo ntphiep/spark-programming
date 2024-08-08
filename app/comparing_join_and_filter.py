@@ -2,10 +2,7 @@ import sys, os
 import time
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName("Comparing").getOrCreate()
-
-
-
+spark = SparkSession.builder.master("local[*]").appName("Comparing").getOrCreate()
 
 
 # rdd_A = sc.parallelize([(1, -1), (2, 20), (3, 3), (4, 0), (5, -12)])
@@ -71,7 +68,11 @@ match sys.argv[1]:
         print(filter_first())
         
     case _:
-        print("j or f")
+        [print(executor.host()) for executor in spark._jsc.sc().statusTracker().getExecutorInfos()]
+        print(spark._jsc.sc().getExecutorMemoryStatus().keys())
+        print(spark._jsc.sc() is spark.sparkContext)
+        print("-----------------------")
+        print(rdd_A.take(10000))
         
         
 spark.stop()
