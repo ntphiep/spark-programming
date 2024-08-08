@@ -1,20 +1,25 @@
-import sys
+import sys, os
 import time
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName("Comparing").getOrCreate()
-sc = spark.sparkContext
-
-rdd_A = sc.parallelize([(1, -1), (2, 20), (3, 3), (4, 0), (5, -12)])
-rdd_B = sc.parallelize([(1, 31), (2, 3), (3, 0), (4, -2), (5, 17)])
+spark = SparkSession.builder.master("local[*]").appName("Comparing").getOrCreate()
 
 
+# rdd_A = sc.parallelize([(1, -1), (2, 20), (3, 3), (4, 0), (5, -12)])
+# rdd_B = sc.parallelize([(1, 31), (2, 3), (3, 0), (4, -2), (5, 17)])
 
-# rdd_A = spark.sparkContext.textFile(r"C:\Users\DangTinh\Desktop\spark-programming\data\compare\ex1.txt") \
-# 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
 
-# rdd_B = spark.sparkContext.textFile(r"C:\Users\DangTinh\Desktop\spark-programming\data\compare\ex2.txt") \
-# 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+file_path = "file:///home/hiep/work/spark-k/data/compare/" if os.name != 'nt' else r"C:\Users\DangTinh\Desktop\spark-programming\data\compare\\"
+
+
+rdd_A = spark.sparkContext \
+        .textFile(file_path + "ex1.txt") \
+		.map(lambda x: (x.split(",")[0], x.split(",")[1])) 
+
+rdd_B = spark.sparkContext \
+        .textFile(file_path + "ex2.txt") \
+		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+
 
 
 
@@ -23,6 +28,10 @@ rdd_B = sc.parallelize([(1, 31), (2, 3), (3, 0), (4, -2), (5, 17)])
 
 # rdd_B = spark.sparkContext.textFile("file:///home/hiep/work/spark-k/data/compare/ex2.txt") \
 # 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+
+
+
+print("Number of partitions of rdd_A: ", rdd_A.getNumPartitions())
 
 
 def time_decor(func):
@@ -51,7 +60,6 @@ def filter_first():
     return join_rdd_f.take(1), join_rdd_f.getNumPartitions()
 
 
-
 match sys.argv[1]:
     case "j":
         print(join_first())
@@ -60,7 +68,11 @@ match sys.argv[1]:
         print(filter_first())
         
     case _:
-        print("j or f")
+        [print(executor.host()) for executor in spark._jsc.sc().statusTracker().getExecutorInfos()]
+        print(spark._jsc.sc().getExecutorMemoryStatus().keys())
+        print(spark._jsc.sc() is spark.sparkContext)
+        print("-----------------------")
+        print(rdd_A.take(10000))
         
         
 spark.stop()
