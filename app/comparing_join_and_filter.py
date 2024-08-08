@@ -1,20 +1,28 @@
-import sys
+import sys, os
 import time
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("Comparing").getOrCreate()
-sc = spark.sparkContext
-
-rdd_A = sc.parallelize([(1, -1), (2, 20), (3, 3), (4, 0), (5, -12)])
-rdd_B = sc.parallelize([(1, 31), (2, 3), (3, 0), (4, -2), (5, 17)])
 
 
 
-# rdd_A = spark.sparkContext.textFile(r"C:\Users\DangTinh\Desktop\spark-programming\data\compare\ex1.txt") \
-# 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
 
-# rdd_B = spark.sparkContext.textFile(r"C:\Users\DangTinh\Desktop\spark-programming\data\compare\ex2.txt") \
-# 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+
+# rdd_A = sc.parallelize([(1, -1), (2, 20), (3, 3), (4, 0), (5, -12)])
+# rdd_B = sc.parallelize([(1, 31), (2, 3), (3, 0), (4, -2), (5, 17)])
+
+
+file_path = "file:///home/hiep/work/spark-k/data/compare/" if os.name != 'nt' else r"C:\Users\DangTinh\Desktop\spark-programming\data\compare\\"
+
+
+rdd_A = spark.sparkContext \
+        .textFile(file_path + "ex1.txt") \
+		.map(lambda x: (x.split(",")[0], x.split(",")[1])) 
+
+rdd_B = spark.sparkContext \
+        .textFile(file_path + "ex2.txt") \
+		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+
 
 
 
@@ -23,6 +31,10 @@ rdd_B = sc.parallelize([(1, 31), (2, 3), (3, 0), (4, -2), (5, 17)])
 
 # rdd_B = spark.sparkContext.textFile("file:///home/hiep/work/spark-k/data/compare/ex2.txt") \
 # 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+
+
+
+print("Number of partitions of rdd_A: ", rdd_A.getNumPartitions())
 
 
 def time_decor(func):
@@ -49,7 +61,6 @@ def filter_first():
     rdd_B_f = rdd_B.filter(lambda x: x[1] >= 6)
     join_rdd_f = rdd_A_f.join(rdd_B_f)
     return join_rdd_f.take(1), join_rdd_f.getNumPartitions()
-
 
 
 match sys.argv[1]:
