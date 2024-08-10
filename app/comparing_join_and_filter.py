@@ -1,34 +1,54 @@
 import sys, os
 import time
+
+from pyspark import SparkConf
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.master("local[*]").appName("Comparing").getOrCreate()
-
+# spark = SparkSession.builder.master("local[*]").appName("Comparing").getOrCreate()
 
 # rdd_A = sc.parallelize([(1, -1), (2, 20), (3, 3), (4, 0), (5, -12)])
 # rdd_B = sc.parallelize([(1, 31), (2, 3), (3, 0), (4, -2), (5, 17)])
+
+# rdd_A = spark.sparkContext.textFile("file:///home/hiep/work/spark-k/data/compare/ex1.txt") \
+# 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+# rdd_B = spark.sparkContext.textFile("file:///home/hiep/work/spark-k/data/compare/ex2.txt") \
+# 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+
+
+
+
+conf = SparkConf() \
+        .setAppName("Comparing") \
+        .set("spark.driver.host", "192.168.1.7") \
+        .set("spark.driver.memory", "8g") \
+        .set("spark.executor.memory", "4g") \
+        .set("spark.executor.cores", "4") \
+        .set("spark.executor.instances", "2") \
+        .set("spark.network.timeout", "1000000s") \
+        .set("spark.sql.shuffle.partitions", "2") \
+        .set("spark.default.parallelism", "10") \
+        
+        
+        
+        
+        
+        
+spark = SparkSession.builder.config(conf=conf).getOrCreate()
 
 
 file_path = "file:///home/hiep/work/spark-k/data/compare/" if os.name != 'nt' else r"C:\Users\DangTinh\Desktop\spark-programming\data\compare\\"
 
 
 rdd_A = spark.sparkContext \
-        .textFile(file_path + "ex1.txt") \
-		.map(lambda x: (x.split(",")[0], x.split(",")[1])) 
+        .textFile(file_path + "ex1.txt", 40) \
+		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+  
+  
+# rdd_A = spark.sparkContext.parallelize([(1, -1), (2, 20), (3, 3), (4, 0), (5, -12)])
 
 rdd_B = spark.sparkContext \
         .textFile(file_path + "ex2.txt") \
 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
-
-
-
-
-# rdd_A = spark.sparkContext.textFile("file:///home/hiep/work/spark-k/data/compare/ex1.txt") \
-# 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
-
-# rdd_B = spark.sparkContext.textFile("file:///home/hiep/work/spark-k/data/compare/ex2.txt") \
-# 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
-
 
 
 print("Number of partitions of rdd_A: ", rdd_A.getNumPartitions())
@@ -60,6 +80,14 @@ def filter_first():
     return join_rdd_f.take(1), join_rdd_f.getNumPartitions()
 
 
+@time_decor
+def test():
+    global rdd_A
+    rdd_A = rdd_A.filter(lambda x: int(x[0]) < 1000000)
+    time.sleep(120)
+    return rdd_A.take(10)
+
+
 match sys.argv[1]:
     case "j":
         print(join_first())
@@ -70,9 +98,10 @@ match sys.argv[1]:
     case _:
         [print(executor.host()) for executor in spark._jsc.sc().statusTracker().getExecutorInfos()]
         print(spark._jsc.sc().getExecutorMemoryStatus().keys())
-        print(spark._jsc.sc() is spark.sparkContext)
+        # print(spark._jsc.sc() is spark.sparkContext)
         print("-----------------------")
-        print(rdd_A.take(10000))
+        test()
         
         
+
 spark.stop()
