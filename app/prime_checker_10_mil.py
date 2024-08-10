@@ -9,7 +9,6 @@ conf = SparkConf().setAppName("prime_checker_10_mil") \
                 .set("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
                 .set("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
 
-
                 # .set("spark.executor.memory", "2g") \
                 # .set("spark.driver.memory", "2g") \
                 # .set("spark.driver.maxResultSize", "2g") \
