@@ -23,6 +23,14 @@ services:
     networks:
       - net
 
+  spark-history-server:
+    image: bitnami/spark:3.5.1
+    command: bin/spark-class org.apache.spark.deploy.history.HistoryServer
+    depends_on:
+      - spark-master
+    networks:
+      - net
+
 networks:
   net:
     driver: bridge
