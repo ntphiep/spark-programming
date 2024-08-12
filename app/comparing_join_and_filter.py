@@ -15,9 +15,10 @@ from pyspark.sql import SparkSession
 
 conf = SparkConf() \
         .setAppName("Comparing") \
+        .set("spark.executor.cores", "4") \
+        # .set("spark.executor.memory", "4g") \
         # .set("spark.driver.host", "192.168.1.7") \
         # .set("spark.driver.memory", "8g") \
-        # .set("spark.executor.memory", "4g") \
         # .set("spark.executor.cores", "5") \
         # .set("spark.network.timeout", "10000s") \
         # .set("spark.sql.shuffle.partitions", "2") \
@@ -32,16 +33,17 @@ spark = SparkSession.builder.config(conf=conf).getOrCreate()
 file_path = "file:///data/compare/" if os.name != 'nt' else r"file://C:\Users\DangTinh\Desktop\spark-programming\data\compare\\"
 
 rdd_A = spark.sparkContext \
-        .textFile(file_path + "ex1.txt") \
+        .textFile(file_path + "ex1.txt",) \
 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
 
 rdd_B = spark.sparkContext \
-        .textFile(file_path + "ex2.txt") \
+        .textFile(file_path + "ex2.txt",) \
 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
 
 
-
+print("_------------------------------------_")
 print("Number of partitions of rdd_A: ", rdd_A.getNumPartitions())
+print("Number of partitions of rdd_B: ", rdd_B.getNumPartitions())
 print("Number of partitions of join: ", rdd_A.join(rdd_B).getNumPartitions())
 
 
@@ -61,22 +63,22 @@ def time_decor(func):
 def join_first():
     joined_rdd = rdd_A.join(rdd_B)
     filter_rdd = joined_rdd.filter(lambda x: x[1][0] < 1 and x[1][1] >= 6)
-    return filter_rdd.take(1), filter_rdd.getNumPartitions()
+    return filter_rdd.collect(), filter_rdd.getNumPartitions()
     
 @time_decor
 def filter_first():
     rdd_A_f = rdd_A.filter(lambda x: x[1] < 1)
     rdd_B_f = rdd_B.filter(lambda x: x[1] >= 6)
     join_rdd_f = rdd_A_f.join(rdd_B_f)
-    return join_rdd_f.take(1), join_rdd_f.getNumPartitions()
+    return join_rdd_f.collect(), join_rdd_f.getNumPartitions()
 
 
 @time_decor
 def test():
-    global rdd_A
-    rdd_A = rdd_A.filter(lambda x: int(x[0]) < 1000000)
+    global rdd_A, rdd_B
+    # rdd_A = rdd_A.filter(lambda x: int(x[0]) < 1000000)
     # time.sleep(120)
-    return rdd_A.collect()
+    return rdd_A.join(rdd_B).collect()
 
 
 match sys.argv[1]:
