@@ -7,6 +7,9 @@ services:
     ports:
       - "8080:8080"
       - "7077:7077"
+    volumes:
+      - ../app:/app
+      - ../data:/data
     networks:
       - net
 
@@ -17,19 +20,22 @@ services:
       - spark-master
     environment:
       SPARK_MODE: worker
-      SPARK_WORKER_CORES: 2
-      SPARK_WORKER_MEMORY: 2G
+      SPARK_WORKER_CORES: 4
+      SPARK_WORKER_MEMORY: 4G
       SPARK_MASTER_URL: spark://spark-master:7077
+    volumes:
+      - ../app:/app
+      - ../data:/data
     networks:
       - net
 
-  spark-history-server:
-    image: bitnami/spark:3.5.1
-    command: bin/spark-class org.apache.spark.deploy.history.HistoryServer
-    depends_on:
-      - spark-master
-    networks:
-      - net
+  # spark-history-server:
+  #   image: bitnami/spark:3.5.1
+  #   command: bin/spark-class org.apache.spark.deploy.history.HistoryServer
+  #   depends_on:
+  #     - spark-master
+  #   networks:
+  #     - net
 
 networks:
   net:
