@@ -20,8 +20,8 @@ services:
       - spark-master
     environment:
       SPARK_MODE: worker
-      SPARK_WORKER_CORES: 4
-      SPARK_WORKER_MEMORY: 4G
+      SPARK_WORKER_CORES: 8
+      SPARK_WORKER_MEMORY: 8G
       SPARK_MASTER_URL: spark://spark-master:7077
     volumes:
       - ../app:/app
@@ -31,11 +31,32 @@ services:
 
   # spark-history-server:
   #   image: bitnami/spark:3.5.1
-  #   command: bin/spark-class org.apache.spark.deploy.history.HistoryServer
+  #   entrypoint:  ['start-history-server.sh']
+  #   ports:
+  #     - "18080:18080"
   #   depends_on:
   #     - spark-master
   #   networks:
   #     - net
+
+  spark-connect:
+    image: bitnami/spark:3.5.1
+    # command:
+    #   - "/bin/bash"
+    #   - "-c"
+    #   - ""
+    command: sbin/start-connect-server.sh --packages org.apache.spark:spark-connect_2.12:3.5.1
+    volumes:
+      - ../app:/app
+      - ../data:/data
+    ports:
+      - "15002:15002"
+    depends_on:
+      - spark-master
+    networks:
+      - net
+
+    
 
 networks:
   net:

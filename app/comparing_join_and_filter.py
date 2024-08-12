@@ -29,15 +29,16 @@ spark = SparkSession.builder.config(conf=conf).getOrCreate()
 # rdd_A = spark.sparkContext.parallelize([(1, -1), (2, 20), (3, 3), (4, 0), (5, -12)])
 # rdd_B = spark.sparkContext.parallelize([(1, 31), (2, 3), (3, 0), (4, -2), (5, 17)])   
 
-file_path = "file:///data/compare/" if os.name != 'nt' else r"C:\Users\DangTinh\Desktop\spark-programming\data\compare\\"
+file_path = "file:///data/compare/" if os.name != 'nt' else r"file://C:\Users\DangTinh\Desktop\spark-programming\data\compare\\"
 
 rdd_A = spark.sparkContext \
-        .textFile(file_path + "ex1.txt", 12) \
+        .textFile(file_path + "ex1.txt") \
 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
 
 rdd_B = spark.sparkContext \
-        .textFile(file_path + "ex2.txt", 12) \
+        .textFile(file_path + "ex2.txt") \
 		.map(lambda x: (x.split(",")[0], x.split(",")[1]))
+
 
 
 print("Number of partitions of rdd_A: ", rdd_A.getNumPartitions())
