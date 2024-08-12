@@ -1,0 +1,10 @@
+C:\Users\DangTinh\Desktop\spark-programming\spark_connect\rust\rust-test-spark\target\debug\deps\libnum_complex-74f37c3f3350acf2.rmeta: C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\lib.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\cast.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\pow.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\complex_float.rs
+
+C:\Users\DangTinh\Desktop\spark-programming\spark_connect\rust\rust-test-spark\target\debug\deps\libnum_complex-74f37c3f3350acf2.rlib: C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\lib.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\cast.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\pow.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\complex_float.rs
+
+C:\Users\DangTinh\Desktop\spark-programming\spark_connect\rust\rust-test-spark\target\debug\deps\num_complex-74f37c3f3350acf2.d: C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\lib.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\cast.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\pow.rs C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\complex_float.rs
+
+C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\lib.rs:
+C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\cast.rs:
+C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\pow.rs:
+C:\Users\DangTinh\.cargo\registry\src\index.crates.io-6f17d22bba15001f\num-complex-0.4.6\src\complex_float.rs:
