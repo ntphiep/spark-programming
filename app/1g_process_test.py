@@ -4,8 +4,9 @@ from pyspark import SparkConf
 import sys, os
 
 conf = SparkConf() \
-        .setAppName("1g") \
+        .setAppName("1g_process") \
         .set("spark.executor.cores", "4") \
+        .set("spark.executor.memory", "4g") \
         # .set("spark.executor.memory", "4g") \
         # .set("spark.driver.host", "
 
@@ -31,3 +32,4 @@ print("--------------------------")
 print(df.rdd.getNumPartitions())
 print(df.count())
 print(df.show(10))
+

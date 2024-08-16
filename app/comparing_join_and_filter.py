@@ -15,7 +15,7 @@ from pyspark.sql import SparkSession
 
 conf = SparkConf() \
         .setAppName("Comparing") \
-        .set("spark.executor.cores", "4") \
+        # .set("spark.executor.cores", "4") \
         # .set("spark.executor.memory", "4g") \
         # .set("spark.driver.host", "192.168.1.7") \
         # .set("spark.driver.memory", "8g") \
@@ -59,18 +59,18 @@ def time_decor(func):
     return wrapper
 
 
-@time_decor
-def join_first():
-    joined_rdd = rdd_A.join(rdd_B)
-    filter_rdd = joined_rdd.filter(lambda x: x[1][0] < 1 and x[1][1] >= 6)
-    return filter_rdd.collect(), filter_rdd.getNumPartitions()
+# @time_decor
+# def join_first():
+#     joined_rdd = rdd_A.join(rdd_B)
+#     filter_rdd = joined_rdd.filter(lambda x: x[1][0] < 1 and x[1][1] >= 6)
+#     return filter_rdd.collect(), filter_rdd.getNumPartitions()
     
-@time_decor
-def filter_first():
-    rdd_A_f = rdd_A.filter(lambda x: x[1] < 1)
-    rdd_B_f = rdd_B.filter(lambda x: x[1] >= 6)
-    join_rdd_f = rdd_A_f.join(rdd_B_f)
-    return join_rdd_f.collect(), join_rdd_f.getNumPartitions()
+# @time_decor
+# def filter_first():
+#     rdd_A_f = rdd_A.filter(lambda x: x[1] < 1)
+#     rdd_B_f = rdd_B.filter(lambda x: x[1] >= 6)
+#     join_rdd_f = rdd_A_f.join(rdd_B_f)
+#     return join_rdd_f.collect(), join_rdd_f.getNumPartitions()
 
 
 @time_decor
@@ -82,11 +82,11 @@ def test():
 
 
 match sys.argv[1]:
-    case "j":
-        print(join_first())
+    # case "j":
+    #     print(join_first())
         
-    case "f":
-        print(filter_first())
+    # case "f":
+    #     print(filter_first())
         
     case _:
         [print(executor.host()) for executor in spark._jsc.sc().statusTracker().getExecutorInfos()]
