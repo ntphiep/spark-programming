@@ -3,7 +3,7 @@
 ### List all resource in AWS
 ```bash
 aws resourcegroupstaggingapi get-resources
-``` 
+```
 
 ### List all resource in AWS with specific tag
 ```bash
