@@ -23,7 +23,7 @@ services:
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 2G
       SPARK_MASTER_URL: spark://spark-master:7077
-    volumes:
+    volumes:  
       - ../app:/app
       - ../data:/data
     networks:
@@ -56,7 +56,16 @@ services:
     networks:
       - net
 
-    
+  
+  # docker-proxy:
+  #   image: bobrik/socat
+  #   command: "TCP4-LISTEN:2375,fork,reuseaddr UNIX-CONNECT:/var/run/docker.sock"
+  #   ports:
+  #     - "2376:2375"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   networks:
+  #     - airflow-kafka
 
 networks:
   net:
